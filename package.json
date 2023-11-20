@@ -1,7 +1,7 @@
 {
   "name": "skyview",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^20.9.2",
     "react": "latest",
     "react-dom": "latest",
     "vite-plugin-svgr": "^4.2.0"
