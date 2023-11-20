@@ -1,0 +1,16 @@
+#weather-container {
+  background-color: #2980B9;
+  border-radius: 3rem;
+  padding: 2rem;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#skyview-logo {
+  fill: white;
+}
