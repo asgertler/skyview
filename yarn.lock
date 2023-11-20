@@ -2736,6 +2736,15 @@ react-dom@latest:
   languageName: node
   linkType: hard
 
+"react-icons@npm:^4.12.0":
+  version: 4.12.0
+  resolution: "react-icons@npm:4.12.0"
+  peerDependencies:
+    react: "*"
+  checksum: db82a141117edcd884ade4229f0294b2ce15d82f68e0533294db07765d6dce00b129cf504338ec7081ce364fe899b296cb7752554ea08665b1d6bad811134e79
+  languageName: node
+  linkType: hard
+
 "react-refresh@npm:^0.14.0":
   version: 0.14.0
   resolution: "react-refresh@npm:0.14.0"
@@ -2917,6 +2926,7 @@ react@latest:
     eslint-plugin-react-refresh: ^0.4.4
     react: latest
     react-dom: latest
+    react-icons: ^4.12.0
     typescript: ^5.2.2
     vite: ^5.0.0
     vite-plugin-svgr: ^4.2.0
