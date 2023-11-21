@@ -13,7 +13,7 @@ import {
 
 import Logo from './assets/skyview-logo.svg?react'
 
-import './App.css'
+import './App.sass'
 
 function App() {
   const appVersion = process.env.npm_package_version
