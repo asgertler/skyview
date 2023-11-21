@@ -26,6 +26,10 @@ function App() {
   const kelvinToF = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
   const kelvinFeelsLikeTemp = 291.66
   const kelvinFeelsLikeToF = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinHigh = 293.21
+  const kelvinHToF = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinLow = 290.05
+  const kelvinLToF = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
 
   return (
     <div id='weather-container'>
@@ -42,15 +46,30 @@ function App() {
             <TiWeatherCloudy />
             <p>Cloudy</p>
           </div>
+
           <div id='cw-right'>
-            <div className='cwr-info'>
-              <div className='info-label'>Temp</div>
-              <div className='info-value'>{kelvinToF}°F</div>
+            <div className='cwr-info-row'>
+              <div className='cwr-info'>
+                <div className='info-label'>Temp</div>
+                <div className='info-value'>{kelvinToF}°F</div>
+              </div>
+
+              <div className='cwr-info'>
+                <div className='info-label'>Feels Like</div>
+                <div className='info-value'>{kelvinFeelsLikeToF}°F</div>
+              </div>
             </div>
 
-            <div className='cwr-info'>
-              <div className='info-label'>Feels Like</div>
-              <div className='info-value'>{kelvinFeelsLikeToF}°F</div>
+            <div className='cwr-info-row'>
+              <div className='cwr-info'>
+                <div className='info-label'>High</div>
+                <div className='info-value'>{kelvinHToF}°F</div>
+              </div>
+
+              <div className='cwr-info'>
+                <div className='info-label'>Low</div>
+                <div className='info-value'>{kelvinLToF}°F</div>
+              </div>
             </div>
           </div>
         </div>

@@ -79,14 +79,18 @@
 #cw-right {
   font-weight: bold;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column nowrap;
+}
+
+.cwr-info-row {
+  display: flex;
+  flex-flow: row nowrap;
   gap: 1rem;
 }
 
 .cwr-info {
   display: flex;
   flex-flow: column nowrap;
-  align-items: flex-start;
 }
 
 .info-label {
