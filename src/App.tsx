@@ -1,4 +1,18 @@
+import {
+  TiWeatherCloudy,
+  TiWeatherDownpour,
+  TiWeatherNight,
+  TiWeatherPartlySunny,
+  TiWeatherShower,
+  TiWeatherSnow,
+  TiWeatherStormy,
+  TiWeatherSunny,
+  TiWeatherWindy,
+  TiWeatherWindyCloudy
+} from 'react-icons/ti'
+
 import Logo from './assets/skyview-logo.svg?react'
+
 import './App.css'
 
 function App() {
@@ -6,6 +20,12 @@ function App() {
   const currentYear = new Date().getFullYear()
   const defaultLat = '36.174465'
   const defaultLon = '-86.767960'
+
+  // test data
+  const kelvinTemp = 292.07
+  const kelvinToF = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinFeelsLikeTemp = 291.66
+  const kelvinFeelsLikeToF = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
 
   return (
     <div id='weather-container'>
@@ -19,10 +39,19 @@ function App() {
       <div id='weather-info'>
         <div id='current-weather'>
           <div id='cw-left'>
-            Icon
+            <TiWeatherCloudy />
+            <p>Cloudy</p>
           </div>
           <div id='cw-right'>
-            Info
+            <div className='cwr-info'>
+              <div className='info-label'>Temp</div>
+              <div className='info-value'>{kelvinToF}°F</div>
+            </div>
+
+            <div className='cwr-info'>
+              <div className='info-label'>Feels Like</div>
+              <div className='info-value'>{kelvinFeelsLikeToF}°F</div>
+            </div>
           </div>
         </div>
 
