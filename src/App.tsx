@@ -16,10 +16,28 @@ import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
+  // default location is Nashville, TN
+  let lat: number = 36.174465
+  let lng: number = -86.767960
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        lat = pos.coords.latitude
+        lng = pos.coords.longitude
+
+        console.log(`Latitude: ${lat}, longitude: ${lng}`)
+      },
+      (err) => {
+        console.error("Error getting user location:", err)
+      }
+    )
+  } else {
+    console.error("Geolocation is not supported by this browser.")
+  }
+
   const appVersion = process.env.npm_package_version
   const currentYear = new Date().getFullYear()
-  const defaultLat = '36.174465'
-  const defaultLon = '-86.767960'
 
   // test data
   const kelvinTemp = 292.07
@@ -73,6 +91,8 @@ function App() {
             </div>
           </div>
         </div>
+
+        <strong>User Location:</strong>{` Lat: ${lat}, Long: ${lng}`}
 
         <div id='five-day-weather'>
           <div id='fdw-1'>
