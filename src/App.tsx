@@ -10,9 +10,7 @@ import {
   TiWeatherWindy,
   TiWeatherWindyCloudy
 } from 'react-icons/ti'
-
 import Logo from './assets/skyview-logo.svg?react'
-
 import './App.sass'
 
 function App() {
@@ -23,8 +21,8 @@ function App() {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        lat = pos.coords.latitude
-        lng = pos.coords.longitude
+        lat = pos.coords.latitude as number
+        lng = pos.coords.longitude as number
 
         console.log(`Latitude: ${lat}, longitude: ${lng}`)
       },
@@ -36,18 +34,18 @@ function App() {
     console.error("Geolocation is not supported by this browser.")
   }
 
-  const appVersion = process.env.npm_package_version
-  const currentYear = new Date().getFullYear()
+  const appVersion: string = process.env.npm_package_version as string
+  const currentYear: number = new Date().getFullYear()
 
   // test data
-  const kelvinTemp = 292.07
-  const kelvinToF = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinFeelsLikeTemp = 291.66
-  const kelvinFeelsLikeToF = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinHigh = 293.21
-  const kelvinHToF = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinLow = 290.05
-  const kelvinLToF = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinTemp: number = 292.07
+  const kelvinToF: string = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinFeelsLikeTemp: number = 291.66
+  const kelvinFeelsLikeToF: string = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinHigh: number = 293.21
+  const kelvinHToF: string = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
+  const kelvinLow:number = 290.05
+  const kelvinLToF: string = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
 
   return (
     <div id='weather-container'>
