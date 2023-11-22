@@ -66,7 +66,7 @@ function App() {
           </div>
 
           <div id='cw-right'>
-            <div className='cwr-info-row'>
+            <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
                 <div className='info-value'>{kelvinToF}°F</div>
@@ -78,7 +78,7 @@ function App() {
               </div>
             </div>
 
-            <div className='cwr-info-row'>
+            <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>High</div>
                 <div className='info-value'>{kelvinHToF}°F</div>
