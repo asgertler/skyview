@@ -1,15 +1,18 @@
-import {
-  TiWeatherCloudy,
-  TiWeatherDownpour,
-  TiWeatherNight,
-  TiWeatherPartlySunny,
-  TiWeatherShower,
-  TiWeatherSnow,
-  TiWeatherStormy,
-  TiWeatherSunny,
-  TiWeatherWindy,
-  TiWeatherWindyCloudy
-} from 'react-icons/ti'
+// import {
+//   TiWeatherCloudy,
+//   TiWeatherDownpour,
+//   TiWeatherNight,
+//   TiWeatherPartlySunny,
+//   TiWeatherShower,
+//   TiWeatherSnow,
+//   TiWeatherStormy,
+//   TiWeatherSunny,
+//   TiWeatherWindy,
+//   TiWeatherWindyCloudy
+// } from 'react-icons/ti'
+
+import { WiCloudy } from "react-icons/wi"
+import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io"
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
@@ -17,6 +20,8 @@ function App() {
   // default location is Nashville, TN
   let lat: number = 36.174465
   let lng: number = -86.767960
+  const city: string = 'Nashville'
+  console.log('city', city)
 
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -59,7 +64,7 @@ function App() {
       <div id='weather-info'>
         <div id='current-weather'>
           <div id='cw-left'>
-            <TiWeatherCloudy />
+            <WiCloudy />
             <p>Cloudy</p>
           </div>
 
@@ -78,12 +83,16 @@ function App() {
 
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
-                <div className='info-label'>High</div>
+                <div className='info-label'>
+                  <IoMdArrowDropup />High
+                </div>
                 <div className='info-value'>{kelvinHToF}°F</div>
               </div>
 
               <div className='cwr-info'>
-                <div className='info-label'>Low</div>
+                <div className='info-label'>
+                  <IoMdArrowDropdown />Low
+                </div>
                 <div className='info-value'>{kelvinLToF}°F</div>
               </div>
             </div>
