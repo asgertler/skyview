@@ -4,6 +4,7 @@ import svgr from "vite-plugin-svgr"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/skyview",
   plugins: [svgr(), react()],
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
