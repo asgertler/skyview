@@ -24,8 +24,7 @@ function App() {
   // default location is Nashville, TN
   const [lat, setLat] = useState<number>(36.174465)
   const [lng, setLng] = useState<number>(-86.767960)
-  const [city, setCity] = useState<string>('Nashville')
-  console.log('city', city)
+  const [city, /* setCity */] = useState<string>('Nashville')
 
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -42,6 +41,14 @@ function App() {
   } else {
     console.error("Geolocation is not supported by this browser.")
   }
+
+  function generateStaticMapUrl(latitude: number, longitude: number, zoom: number = 10, width: number = 400, height: number = 300): string {
+    const apiKey = 'AIzaSyAmgACrMnBIwcHcHGJHh7wQLQrVOp5Krqk'
+    const marker = `&markers=color:red%7C${latitude},${longitude}`;
+    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${zoom}&size=${width}x${height}&maptype=roadmap${marker}&key=${apiKey}`;
+    return mapUrl
+  }
+  const mapUrl = generateStaticMapUrl(lat, lng)
 
   const appVersion: string = import.meta.env.VITE_APP_VERSION as string
   const currentYear: number = new Date().getFullYear()
@@ -129,6 +136,8 @@ function App() {
             {` LAT: ${lat.toFixed(3)} / LNG: ${lng.toFixed(3)}`}
           </div>
         </div>
+
+        <img src={mapUrl} alt="Static Map" />
       </div>
 
       <footer id='weather-footer'>
