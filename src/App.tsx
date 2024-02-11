@@ -42,7 +42,7 @@ function App() {
     console.error("Geolocation is not supported by this browser.")
   }
 
-  const appVersion: string = APP_VERSION
+  const appVersion: string = import.meta.env.VITE_APP_VERSION as string
   const currentYear: number = new Date().getFullYear()
 
   // test data
