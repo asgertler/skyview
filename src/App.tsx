@@ -1,5 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
+import { useState } from "react"
 
 // import {
 //   TiWeatherCloudy,
@@ -15,22 +16,22 @@
 // } from 'react-icons/ti'
 
 import { WiCloudy } from "react-icons/wi"
-import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io"
+import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from "react-icons/io"
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
   // default location is Nashville, TN
-  let lat: number = 36.174465
-  let lng: number = -86.767960
-  const city: string = 'Nashville'
+  const [lat, setLat] = useState<number>(36.174465)
+  const [lng, setLng] = useState<number>(-86.767960)
+  const [city, setCity] = useState<string>('Nashville')
   console.log('city', city)
 
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        lat = pos.coords.latitude as number
-        lng = pos.coords.longitude as number
+        setLat(pos.coords.latitude as number)
+        setLng(pos.coords.longitude as number)
 
         console.log(`Latitude: ${lat}, longitude: ${lng}`)
       },
@@ -102,8 +103,6 @@ function App() {
           </div>
         </div>
 
-        <strong>User Location:</strong>{` Lat: ${lat}, Long: ${lng}`}
-
         <div id='five-day-weather'>
           <div id='fdw-1'>
             1
@@ -119,6 +118,15 @@ function App() {
           </div>
           <div id='fdw-5'>
             5
+          </div>
+        </div>
+
+        <div id='location'>
+          <div id='location-city'>
+            <IoMdPin />{`${city}`}
+          </div>
+          <div id='location-latlng'>
+            {` LAT: ${lat.toFixed(3)} / LNG: ${lng.toFixed(3)}`}
           </div>
         </div>
       </div>
