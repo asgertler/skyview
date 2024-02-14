@@ -55,6 +55,10 @@ function App() {
   const kelvinLow:number = 290.05
   const kelvinLToF: string = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
 
+  const now = new Date()
+  const nowHours = now.getHours()
+  const nowMinutes = now.getMinutes()
+
   return (
     <div id='weather-container'>
       <header id='weather-header'>
@@ -124,8 +128,8 @@ function App() {
           <div id='location-city'>
             <IoMdPin />{`${city}`}
           </div>
-          <div id='location-latlng'>
-            {` LAT: ${lat.toFixed(3)} / LNG: ${lng.toFixed(3)}`}
+          <div id='location-time'>
+            {nowHours}:{nowMinutes}
           </div>
         </div>
       </div>
