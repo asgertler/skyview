@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // import {
 //   TiWeatherCloudy,
@@ -24,7 +24,11 @@ function App() {
   // default location is Nashville, TN
   const [lat, setLat] = useState<number>(36.174465)
   const [lng, setLng] = useState<number>(-86.767960)
-  const [city, /* setCity */] = useState<string>('Nashville')
+  const [city, setCity] = useState<string>('Nashville')
+  const [time, setTime] = useState({
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes(),
+  })
 
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -52,12 +56,20 @@ function App() {
   const kelvinFeelsLikeToF: string = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
   const kelvinHigh: number = 293.21
   const kelvinHToF: string = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinLow:number = 290.05
+  const kelvinLow: number = 290.05
   const kelvinLToF: string = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
 
-  const now = new Date()
-  const nowHours = now.getHours()
-  const nowMinutes = now.getMinutes()
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date()
+      setTime({
+        hours: now.getHours(),
+        minutes: now.getMinutes(),
+      })
+    }, 1000)
+
+    return clearInterval(intervalId)
+  }, [])
 
   return (
     <div id='weather-container'>
@@ -79,12 +91,12 @@ function App() {
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
-                <div className='info-value'>{kelvinToF}°F</div>
+                <div className='info-value'>{kelvinToF}° F</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>Feels Like</div>
-                <div className='info-value'>{kelvinFeelsLikeToF}°F</div>
+                <div className='info-value'>{kelvinFeelsLikeToF}° F</div>
               </div>
             </div>
 
@@ -93,14 +105,14 @@ function App() {
                 <div className='info-label'>
                   <IoMdArrowDropup />High
                 </div>
-                <div className='info-value'>{kelvinHToF}°F</div>
+                <div className='info-value'>{kelvinHToF}° F</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>
                   <IoMdArrowDropdown />Low
                 </div>
-                <div className='info-value'>{kelvinLToF}°F</div>
+                <div className='info-value'>{kelvinLToF}° F</div>
               </div>
             </div>
           </div>
@@ -129,7 +141,7 @@ function App() {
             <IoMdPin />{`${city}`}
           </div>
           <div id='location-time'>
-            {nowHours}:{nowMinutes}
+            {time.hours} : {time.minutes < 10 ? `0${time.minutes}` : time.minutes}
           </div>
         </div>
       </div>
