@@ -68,7 +68,7 @@ function App() {
       })
     }, 1000)
 
-    return clearInterval(intervalId)
+    return () => clearInterval(intervalId)
   }, [])
 
   return (
