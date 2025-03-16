@@ -33,7 +33,6 @@ function App() {
     low: number,
     description: string,
   } | null>(null)
-  console.log(weather)
   
   const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
 
