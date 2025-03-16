@@ -21,9 +21,9 @@ import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
-  const [lat, setLat] = useState<number | null>(null)
-  const [lng, setLng] = useState<number | null>(null)
-  const [city, setCity] = useState<string>('—')
+  const [lat, setLat] = useState<number>(36.174465)
+  const [lng, setLng] = useState<number>(-86.767960)
+  const [city, setCity] = useState<string>('Nashville')
   const [weather, setWeather] = useState<{
     temp: number,
     feelsLike: number,
@@ -71,30 +71,28 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (lat !== null && lng !== null) {
-      const fetchWeather = async () => {
-        try {
-          const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${lat}&lng=${lng}`)
-          const data = await res.json()
-  
-          if (data.weather && data.location) {
-            setWeather({
-              temp: cToF(data.weather.main.temp),
-              feelsLike: cToF(data.weather.main.feels_like),
-              high: cToF(data.weather.main.temp_max),
-              low: cToF(data.weather.main.temp_min),
-              desscription: data.weather.weather[0].description,
-            })
-  
-            setCity(data.location.name)
-          }
-        } catch (err) {
-          console.error('Error fetching weather:', err)
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${lat}&lng=${lng}`)
+        const data = await res.json()
+
+        if (data.weather && data.location) {
+          setWeather({
+            temp: cToF(data.weather.main.temp),
+            feelsLike: cToF(data.weather.main.feels_like),
+            high: cToF(data.weather.main.temp_max),
+            low: cToF(data.weather.main.temp_min),
+            desscription: data.weather.weather[0].description,
+          })
+
+          setCity(data.location.name)
         }
+      } catch (err) {
+        console.error('Error fetching weather:', err)
       }
-  
-      fetchWeather()
     }
+
+    fetchWeather()
   }, [lat, lng])
 
   return (
