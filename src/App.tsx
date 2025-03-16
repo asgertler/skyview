@@ -21,43 +21,42 @@ import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
-  // default location is Nashville, TN
-  const [lat, setLat] = useState<number>(36.174465)
-  const [lng, setLng] = useState<number>(-86.767960)
-  const [city, setCity] = useState<string>('Nashville')
+  const [lat, setLat] = useState<number | null>(null)
+  const [lng, setLng] = useState<number | null>(null)
+  const [city, setCity] = useState<string>('—')
+  const [weather, setWeather] = useState<{
+    temp: number,
+    feelsLike: number,
+    high: number,
+    low: number,
+    desscription: string,
+  } | null>(null)
+  console.log(weather)
   const [time, setTime] = useState({
     hours: new Date().getHours(),
     minutes: new Date().getMinutes(),
   })
 
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setLat(pos.coords.latitude as number)
-        setLng(pos.coords.longitude as number)
+  const cToF = (t: number) => Math.round((t * (9/5)) + 32)
 
-        console.log(`Latitude: ${lat}, longitude: ${lng}`)
-      },
-      (err) => {
-        console.error("Error getting user location:", err)
-      }
-    )
-  } else {
-    console.error("Geolocation is not supported by this browser.")
-  }
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLat(pos.coords.latitude)
+          setLng(pos.coords.longitude)
+        },
+        (err) => {
+          console.error("Error getting user location:", err)
+        }
+      )
+    } else {
+      console.error("Geolocation is not supported by this browser.")
+    }
+  }, [])
 
   const appVersion: string = import.meta.env.VITE_APP_VERSION as string
   const currentYear: number = new Date().getFullYear()
-
-  // test data
-  const kelvinTemp: number = 292.07
-  const kelvinToF: string = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinFeelsLikeTemp: number = 291.66
-  const kelvinFeelsLikeToF: string = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinHigh: number = 293.21
-  const kelvinHToF: string = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinLow: number = 290.05
-  const kelvinLToF: string = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -70,6 +69,33 @@ function App() {
 
     return () => clearInterval(intervalId)
   }, [])
+
+  useEffect(() => {
+    if (lat !== null && lng !== null) {
+      const fetchWeather = async () => {
+        try {
+          const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${lat}&lng=${lng}`)
+          const data = await res.json()
+  
+          if (data.weather && data.location) {
+            setWeather({
+              temp: cToF(data.weather.main.temp),
+              feelsLike: cToF(data.weather.main.feels_like),
+              high: cToF(data.weather.main.temp_max),
+              low: cToF(data.weather.main.temp_min),
+              desscription: data.weather.weather[0].description,
+            })
+  
+            setCity(data.location.name)
+          }
+        } catch (err) {
+          console.error('Error fetching weather:', err)
+        }
+      }
+  
+      fetchWeather()
+    }
+  }, [lat, lng])
 
   return (
     <div id='weather-container'>
@@ -91,12 +117,12 @@ function App() {
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
-                <div className='info-value'>{kelvinToF}° F</div>
+                <div className='info-value'>{weather ? `${weather.temp}° F` : '—'}</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>Feels Like</div>
-                <div className='info-value'>{kelvinFeelsLikeToF}° F</div>
+                <div className='info-value'>{weather ? `${weather.feelsLike}° F` : '—'}</div>
               </div>
             </div>
 
@@ -105,14 +131,14 @@ function App() {
                 <div className='info-label'>
                   <IoMdArrowDropup />High
                 </div>
-                <div className='info-value'>{kelvinHToF}° F</div>
+                <div className='info-value'>{weather ? `${weather.high}° F` : '—'}</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>
                   <IoMdArrowDropdown />Low
                 </div>
-                <div className='info-value'>{kelvinLToF}° F</div>
+                <div className='info-value'>{weather ? `${weather.low}° F` : '—'}</div>
               </div>
             </div>
           </div>
