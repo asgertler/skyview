@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 // import {
 //   TiWeatherCloudy,
@@ -21,6 +21,8 @@ import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
+  const [loading, setIsLoading] = useState<boolean>(true)
+  const [loadingLocation, setLoadingLocation] = useState<boolean>(true)
   const [lat, setLat] = useState<number>(36.174465)
   const [lng, setLng] = useState<number>(-86.767960)
   const [city, setCity] = useState<string>('Nashville')
@@ -29,13 +31,11 @@ function App() {
     feelsLike: number,
     high: number,
     low: number,
-    desscription: string,
+    description: string,
   } | null>(null)
   console.log(weather)
-  const [time, setTime] = useState({
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes(),
-  })
+  
+  const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
 
   const cToF = (t: number) => Math.round((t * (9/5)) + 32)
 
@@ -45,13 +45,16 @@ function App() {
         (pos) => {
           setLat(pos.coords.latitude)
           setLng(pos.coords.longitude)
+          setLoadingLocation(false)
         },
         (err) => {
           console.error("Error getting user location:", err)
+          setLoadingLocation(false)
         }
       )
     } else {
       console.error("Geolocation is not supported by this browser.")
+      setLoadingLocation(false)
     }
   }, [])
 
@@ -61,10 +64,7 @@ function App() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date()
-      setTime({
-        hours: now.getHours(),
-        minutes: now.getMinutes(),
-      })
+      timeRef.current = { hours: now.getHours(), minutes: now.getMinutes() }
     }, 1000)
 
     return () => clearInterval(intervalId)
@@ -73,6 +73,7 @@ function App() {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
+        setIsLoading(true)
         const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${lat}&lng=${lng}`)
         const data = await res.json()
 
@@ -82,18 +83,22 @@ function App() {
             feelsLike: cToF(data.weather.main.feels_like),
             high: cToF(data.weather.main.temp_max),
             low: cToF(data.weather.main.temp_min),
-            desscription: data.weather.weather[0].description,
+            description: data.weather.weather[0].description,
           })
 
           setCity(data.location.name)
         }
       } catch (err) {
         console.error('Error fetching weather:', err)
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    fetchWeather()
-  }, [lat, lng])
+    if (!loadingLocation) {
+      fetchWeather()
+    }
+  }, [lat, lng, loadingLocation])
 
   return (
     <div id='weather-container'>
@@ -165,7 +170,7 @@ function App() {
             <IoMdPin />{`${city}`}
           </div>
           <div id='location-time'>
-            {time.hours} : {time.minutes < 10 ? `0${time.minutes}` : time.minutes}
+            {timeRef.current.hours} : {timeRef.current.minutes < 10 ? `0${timeRef.current.minutes}` : timeRef.current.minutes}
           </div>
         </div>
       </div>
