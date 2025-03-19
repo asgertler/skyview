@@ -43,7 +43,7 @@
   justify-content: space-between
   align-items: center
   align-content: center
-  gap: .5rem
+  gap: 1.5rem
 
 .cw-left, .cw-right
   text-align: center
@@ -52,26 +52,35 @@
   justify-content: center
 
 .cw-left
+  position: relative
   border-radius: 500px
+  width: 120px
+  height: 120px
   padding: 1.5rem
   display: flex
-  flex-flow: column nowrap
-  // box-shadow: inset 0px 0px 25px rgba(0, 0, 0, .5)
+  align-items: center
+  justify-content: center
 
 .cw-left > svg
+  position: absolute
   font-size: 7rem
-  margin: -1.5rem 0rem -.25rem
+  top: 10px
+  left: 50%
+  transform: translateX(-50%)
 
 .cw-left > p
+  position: absolute
   font-weight: bold
   font-size: 1.5rem
-  margin: -1.5rem 0rem 0rem
+  top: 42%
+  left: 50%
+  transform: translateX(-50%)
 
 .cw-right
   font-weight: bold
   display: flex
   flex-flow: row nowrap
-  gap: 2rem
+  gap: 1.5rem
 
 .cwr-info-stack
   display: flex
