@@ -18,7 +18,7 @@ type AppContextType = {
 }
 
 type AppContextProviderProps = {
-    children: ReactNode
+    children: ReactNode,
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
