@@ -22,10 +22,7 @@ import './App.sass'
 
 function App() {
   const [loading, setIsLoading] = useState<boolean>(true)
-  const [loadingLocation, setLoadingLocation] = useState<boolean>(true)
-  const [lat, setLat] = useState<number>(36.174465)
-  const [lng, setLng] = useState<number>(-86.767960)
-  const [city, setCity] = useState<string>('Nashville')
+  const [city, setCity] = useState<string>('Unknown')
   const [weather, setWeather] = useState<{
     temp: number,
     feelsLike: number,
@@ -38,22 +35,49 @@ function App() {
 
   const cToF = (t: number) => Math.round((t * (9/5)) + 32)
 
+  const fetchWeather = async (latitude: number, longitude: number) => {
+    try {
+      setIsLoading(true)
+  
+      const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${latitude}&lng=${longitude}`)
+      const data = await res.json()
+  
+      if (data.weather && data.location) {
+        setWeather({
+          temp: cToF(data.weather.main.temp),
+          feelsLike: cToF(data.weather.main.feels_like),
+          high: cToF(data.weather.main.temp_max),
+          low: cToF(data.weather.main.temp_min),
+          description: data.weather.weather[0].description,
+        })
+        setCity(data.location.name)
+      }
+    } catch (err) {
+      console.error('Error fetching weather:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  
+
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setLat(pos.coords.latitude)
-          setLng(pos.coords.longitude)
-          setLoadingLocation(false)
+          const { latitude, longitude } = pos.coords
+          console.log(`Geolocation success: ${latitude}, ${longitude}`)
+          fetchWeather(latitude, longitude)
         },
         (err) => {
           console.error("Error getting user location:", err)
-          setLoadingLocation(false)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
         }
       )
     } else {
       console.error("Geolocation is not supported by this browser.")
-      setLoadingLocation(false)
     }
   }, [])
 
@@ -68,36 +92,6 @@ function App() {
 
     return () => clearInterval(intervalId)
   }, [])
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        setIsLoading(true)
-        const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${lat}&lng=${lng}`)
-        const data = await res.json()
-
-        if (data.weather && data.location) {
-          setWeather({
-            temp: cToF(data.weather.main.temp),
-            feelsLike: cToF(data.weather.main.feels_like),
-            high: cToF(data.weather.main.temp_max),
-            low: cToF(data.weather.main.temp_min),
-            description: data.weather.weather[0].description,
-          })
-
-          setCity(data.location.name)
-        }
-      } catch (err) {
-        console.error('Error fetching weather:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (!loadingLocation) {
-      fetchWeather()
-    }
-  }, [lat, lng, loadingLocation])
 
   return (
     <div id='weather-container'>
