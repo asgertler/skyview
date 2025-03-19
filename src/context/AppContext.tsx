@@ -1,25 +1,5 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
-
-type WeatherContextType = {
-    temp: number,
-    feelsLike: number,
-    high: number,
-    low: number,
-    description: string,
-}
-
-type AppContextType = {
-    loading: boolean,
-    setIsLoading: Dispatch<SetStateAction<boolean>>,
-    city: string,
-    setCity: Dispatch<SetStateAction<string>>,
-    weather: WeatherContextType,
-    setWeather: Dispatch<SetStateAction<WeatherContextType>>,
-}
-
-type AppContextProviderProps = {
-    children: ReactNode,
-}
+import { createContext, useState } from 'react'
+import { AppContextProviderProps, AppContextType, WeatherContextType } from '../types/types'
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
 

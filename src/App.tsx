@@ -1,7 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { useEffect, useRef, useState } from "react"
-
+import { useContext, useEffect, useRef } from "react"
+import { AppContext } from "./context/AppContext"
 // import {
 //   TiWeatherCloudy,
 //   TiWeatherDownpour,
@@ -14,22 +14,20 @@ import { useEffect, useRef, useState } from "react"
 //   TiWeatherWindy,
 //   TiWeatherWindyCloudy
 // } from 'react-icons/ti'
-
 import { WiCloudy } from "react-icons/wi"
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from "react-icons/io"
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
-  const [loading, setIsLoading] = useState<boolean>(true)
-  const [city, setCity] = useState<string>('Unknown')
-  const [weather, setWeather] = useState<{
-    temp: number,
-    feelsLike: number,
-    high: number,
-    low: number,
-    description: string,
-  } | null>(null)
+  const {
+    loading,
+    setIsLoading,
+    city,
+    setCity,
+    weather,
+    setWeather,
+  } = useContext(AppContext)
   
   const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
 
