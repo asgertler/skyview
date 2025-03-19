@@ -95,22 +95,22 @@ function App() {
   }, [])
 
   return (
-    <div id='weather-container'>
-      <header id='weather-header'>
-        <Logo id='main-logo' />
-          <div id='version'>
+    <div className='weather-container'>
+      <header className='weather-header'>
+        <Logo className='main-logo' />
+          <div className='version'>
             v{appVersion}
           </div>
       </header>
 
-      <div id='weather-info'>
-        <div id='current-weather'>
-          <div id='cw-left'>
+      <div className='weather-info'>
+        <div className='current-weather'>
+          <div className='cw-left'>
             <WiCloudy />
             <p>{weather.main}</p>
           </div>
 
-          <div id='cw-right'>
+          <div className='cw-right'>
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
@@ -141,35 +141,35 @@ function App() {
           </div>
         </div>
 
-        <div id='five-day-weather'>
-          <div id='fdw-1'>
+        <div className='five-day-weather'>
+          <div className='fdw-1'>
             1
           </div>
-          <div id='fdw-2'>
+          <div className='fdw-2'>
             2
           </div>
-          <div id='fdw-3'>
+          <div className='fdw-3'>
             3
           </div>
-          <div id='fdw-4'>
+          <div className='fdw-4'>
             4
           </div>
-          <div id='fdw-5'>
+          <div className='fdw-5'>
             5
           </div>
         </div>
 
-        <div id='location'>
-          <div id='location-city'>
+        <div className='location'>
+          <div className='location-city'>
             <IoMdPin />{`${city}`}
           </div>
-          <div id='location-time'>
+          <div className='location-time'>
             {timeRef.current.hours} : {timeRef.current.minutes < 10 ? `0${timeRef.current.minutes}` : timeRef.current.minutes}
           </div>
         </div>
       </div>
 
-      <footer id='weather-footer'>
+      <footer className='weather-footer'>
         {`Copyright © ${currentYear} Aaron Gertler. All rights reserved.`}
       </footer>
     </div>
