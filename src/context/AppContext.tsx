@@ -11,7 +11,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
         feelsLike: 0,
         high: 0,
         low: 0,
-        description: '',
+        main: '',
     })
 
     return (

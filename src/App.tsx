@@ -50,7 +50,7 @@ function App() {
           feelsLike: cToF(data.weather.main.feels_like),
           high: cToF(data.weather.main.temp_max),
           low: cToF(data.weather.main.temp_min),
-          description: data.weather.weather[0].description,
+          main: data.weather.weather[0].main,
         })
         setCity(data.location.name)
       }
@@ -107,7 +107,7 @@ function App() {
         <div id='current-weather'>
           <div id='cw-left'>
             <WiCloudy />
-            <p>Cloudy</p>
+            <p>{weather.main}</p>
           </div>
 
           <div id='cw-right'>

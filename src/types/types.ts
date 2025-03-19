@@ -5,7 +5,7 @@ export type WeatherContextType = {
     feelsLike: number,
     high: number,
     low: number,
-    description: string,
+    main: string,
 }
 
 export type AppContextType = {
