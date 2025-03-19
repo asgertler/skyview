@@ -20,6 +20,10 @@ import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
+  const context = useContext(AppContext)
+  if (!context) {
+    throw new Error('AppContext must be used within a Provider')
+  }
   const {
     loading,
     setIsLoading,
@@ -27,7 +31,7 @@ function App() {
     setCity,
     weather,
     setWeather,
-  } = useContext(AppContext)
+  } = context
   
   const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
 
@@ -63,7 +67,6 @@ function App() {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords
-          console.log(`Geolocation success: ${latitude}, ${longitude}`)
           fetchWeather(latitude, longitude)
         },
         (err) => {
