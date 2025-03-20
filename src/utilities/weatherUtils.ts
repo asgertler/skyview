@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react"
-import { WeatherContextType } from "../types/types"
+import { Dispatch, SetStateAction } from 'react'
+import { WeatherContextType } from '../types/types'
 
 export const cToF = (t: number) => Math.round((t * (9/5)) + 32)
 

@@ -1,22 +1,10 @@
-/// <reference types="vite-plugin-svgr/client" />
+/// <reference types='vite-plugin-svgr/client' />
 
-import { useContext, useEffect, useRef } from "react"
-import { AppContext } from "./context/AppContext"
-import { useFetchWeather } from "./utilities/useFetchWeather"
-// import {
-//   TiWeatherCloudy,
-//   TiWeatherDownpour,
-//   TiWeatherNight,
-//   TiWeatherPartlySunny,
-//   TiWeatherShower,
-//   TiWeatherSnow,
-//   TiWeatherStormy,
-//   TiWeatherSunny,
-//   TiWeatherWindy,
-//   TiWeatherWindyCloudy
-// } from 'react-icons/ti'
-import { WiCloudy } from "react-icons/wi"
-import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from "react-icons/io"
+import { useContext, useEffect, useRef } from 'react'
+import { AppContext } from './context/AppContext'
+import { fetchWeather } from './utilities/weatherUtils'
+import { WiCloudy } from 'react-icons/wi'
+import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from 'react-icons/io'
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
@@ -36,42 +24,21 @@ function App() {
   
   const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
 
-  const cToF = (t: number) => Math.round((t * (9/5)) + 32)
-
-  const fetchWeather = async (latitude: number, longitude: number) => {
-    try {
-      setIsLoading(true)
-  
-      const res = await fetch(`https://openweather-proxy.aaron-gertler.workers.dev?lat=${latitude}&lng=${longitude}`)
-      const data = await res.json()
-  
-      if (data.weather && data.location) {
-        setWeather({
-          temp: cToF(data.weather.main.temp),
-          feelsLike: cToF(data.weather.main.feels_like),
-          high: cToF(data.weather.main.temp_max),
-          low: cToF(data.weather.main.temp_min),
-          main: data.weather.weather[0].main,
-        })
-        setCity(data.location.name)
-      }
-    } catch (err) {
-      console.error('Error fetching weather:', err)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  
-
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords
-          fetchWeather(latitude, longitude)
+          fetchWeather(
+            latitude, 
+            longitude, 
+            setIsLoading, 
+            setCity, 
+            setWeather,
+          )
         },
         (err) => {
-          console.error("Error getting user location:", err)
+          console.error('Error getting user location:', err)
         },
         {
           enableHighAccuracy: true,
@@ -79,7 +46,7 @@ function App() {
         }
       )
     } else {
-      console.error("Geolocation is not supported by this browser.")
+      console.error('Geolocation is not supported by this browser.')
     }
   }, [])
 
