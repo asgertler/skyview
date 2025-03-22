@@ -22,7 +22,7 @@ function App() {
     throw new Error('AppContext must be used within a Provider')
   }
   const {
-    loading,
+    // loading,
     setIsLoading,
     city,
     setCity,
