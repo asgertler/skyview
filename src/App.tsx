@@ -3,7 +3,15 @@
 import { useContext, useEffect, useRef } from 'react'
 import { AppContext } from './context/AppContext'
 import { fetchWeather } from './utilities/weatherUtils'
-import { WiCloudy } from 'react-icons/wi'
+import { 
+  WiCloudy,
+  WiDaySunny,
+  WiNa,
+  WiRain,
+  WiSnow,
+  WiSprinkle,
+  WiThunderstorm,
+} from 'react-icons/wi'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from 'react-icons/io'
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
