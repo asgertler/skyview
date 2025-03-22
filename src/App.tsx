@@ -1,6 +1,6 @@
 /// <reference types='vite-plugin-svgr/client' />
 
-import { useContext, useEffect, useRef } from 'react'
+import { ReactNode, useContext, useEffect, useRef } from 'react'
 import { AppContext } from './context/AppContext'
 import { fetchWeather } from './utilities/weatherUtils'
 import { 
@@ -29,8 +29,20 @@ function App() {
     weather,
     setWeather,
   } = context
-  
-  const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
+
+  const appVersion: string = import.meta.env.VITE_APP_VERSION as string
+
+  const weatherIcon = () => {
+    const weatherIcons: { [key: string]: ReactNode } = {
+      Clear: <WiDaySunny style={{ fontSize: '8rem' }} />,
+      Clouds: <WiCloudy style={{ fontSize: '8rem' }} />,
+      Drizzle: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
+      Rain: <WiRain style={{ fontSize: '8rem', top: '8px' }} />,
+      Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
+      Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
+    }
+    return weatherIcons[weather.main] || <WiNa />
+  }
 
   useEffect(() => {
     if ('geolocation' in navigator) {
@@ -58,9 +70,7 @@ function App() {
     }
   }, [])
 
-  const appVersion: string = import.meta.env.VITE_APP_VERSION as string
-  const currentYear: number = new Date().getFullYear()
-
+  const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date()
@@ -69,6 +79,8 @@ function App() {
 
     return () => clearInterval(intervalId)
   }, [])
+
+  const currentYear: number = new Date().getFullYear()
 
   return (
     <div className='weather-container'>
@@ -82,11 +94,11 @@ function App() {
       <div className='weather-info'>
         <div className='current-weather'>
           <div className='cw-left'>
-            <WiCloudy />
-            <p>{weather.main}</p>
+            {weatherIcon()}
           </div>
 
           <div className='cw-right'>
+            <h2>{weather.main}</h2>
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
@@ -117,7 +129,7 @@ function App() {
           </div>
         </div>
 
-        <div className='five-day-weather'>
+        {/* <div className='five-day-weather'>
           <div className='fdw-1'>
             1
           </div>
@@ -133,7 +145,7 @@ function App() {
           <div className='fdw-5'>
             5
           </div>
-        </div>
+        </div> */}
 
         <div className='location'>
           <div className='location-city'>
