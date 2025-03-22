@@ -1,86 +1,113 @@
-/// <reference types="vite-plugin-svgr/client" />
+/// <reference types='vite-plugin-svgr/client' />
 
-
-// import {
-//   TiWeatherCloudy,
-//   TiWeatherDownpour,
-//   TiWeatherNight,
-//   TiWeatherPartlySunny,
-//   TiWeatherShower,
-//   TiWeatherSnow,
-//   TiWeatherStormy,
-//   TiWeatherSunny,
-//   TiWeatherWindy,
-//   TiWeatherWindyCloudy
-// } from 'react-icons/ti'
-
-import { WiCloudy } from "react-icons/wi"
-import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io"
+import { ReactNode, useContext, useEffect, useRef } from 'react'
+import { AppContext } from './context/AppContext'
+import { fetchWeather } from './utilities/weatherUtils'
+import { 
+  WiCloudy,
+  WiDaySunny,
+  WiNa,
+  WiRain,
+  WiSnow,
+  WiSprinkle,
+  WiThunderstorm,
+} from 'react-icons/wi'
+import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from 'react-icons/io'
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
 
 function App() {
-  // default location is Nashville, TN
-  let lat: number = 36.174465
-  let lng: number = -86.767960
-  const city: string = 'Nashville'
-  console.log('city', city)
+  const context = useContext(AppContext)
+  if (!context) {
+    throw new Error('AppContext must be used within a Provider')
+  }
+  const {
+    loading,
+    setIsLoading,
+    city,
+    setCity,
+    weather,
+    setWeather,
+  } = context
 
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        lat = pos.coords.latitude as number
-        lng = pos.coords.longitude as number
+  const appVersion: string = import.meta.env.VITE_APP_VERSION as string
 
-        console.log(`Latitude: ${lat}, longitude: ${lng}`)
-      },
-      (err) => {
-        console.error("Error getting user location:", err)
-      }
-    )
-  } else {
-    console.error("Geolocation is not supported by this browser.")
+  const weatherIcon = () => {
+    const weatherIcons: { [key: string]: ReactNode } = {
+      Clear: <WiDaySunny style={{ fontSize: '8rem' }} />,
+      Clouds: <WiCloudy style={{ fontSize: '8rem' }} />,
+      Drizzle: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
+      Rain: <WiRain style={{ fontSize: '8rem', top: '8px' }} />,
+      Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
+      Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
+    }
+    return weatherIcons[weather.main] || <WiNa />
   }
 
-  const appVersion: string = APP_VERSION
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords
+          fetchWeather(
+            latitude, 
+            longitude, 
+            setIsLoading, 
+            setCity, 
+            setWeather,
+          )
+        },
+        (err) => {
+          console.error('Error getting user location:', err)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+        }
+      )
+    } else {
+      console.error('Geolocation is not supported by this browser.')
+    }
+  }, [])
+
+  const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date()
+      timeRef.current = { hours: now.getHours(), minutes: now.getMinutes() }
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
   const currentYear: number = new Date().getFullYear()
 
-  // test data
-  const kelvinTemp: number = 292.07
-  const kelvinToF: string = ((kelvinTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinFeelsLikeTemp: number = 291.66
-  const kelvinFeelsLikeToF: string = ((kelvinFeelsLikeTemp-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinHigh: number = 293.21
-  const kelvinHToF: string = ((kelvinHigh-273.15)*9/5 + 32).toString().split('.')[0]
-  const kelvinLow:number = 290.05
-  const kelvinLToF: string = ((kelvinLow-273.15)*9/5 + 32).toString().split('.')[0]
-
   return (
-    <div id='weather-container'>
-      <header id='weather-header'>
-        <Logo id='main-logo' />
-          <div id='version'>
+    <div className='weather-container'>
+      <header className='weather-header'>
+        <Logo className='main-logo' />
+          <div className='version'>
             v{appVersion}
           </div>
       </header>
 
-      <div id='weather-info'>
-        <div id='current-weather'>
-          <div id='cw-left'>
-            <WiCloudy />
-            <p>Cloudy</p>
+      <div className='weather-info'>
+        <div className='current-weather'>
+          <div className='cw-left'>
+            {weatherIcon()}
           </div>
 
-          <div id='cw-right'>
+          <div className='cw-right'>
+            <h2>{weather.main}</h2>
             <div className='cwr-info-stack'>
               <div className='cwr-info'>
                 <div className='info-label'>Temp</div>
-                <div className='info-value'>{kelvinToF}°F</div>
+                <div className='info-value'>{weather ? `${weather.temp}° F` : '—'}</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>Feels Like</div>
-                <div className='info-value'>{kelvinFeelsLikeToF}°F</div>
+                <div className='info-value'>{weather ? `${weather.feelsLike}° F` : '—'}</div>
               </div>
             </div>
 
@@ -89,41 +116,48 @@ function App() {
                 <div className='info-label'>
                   <IoMdArrowDropup />High
                 </div>
-                <div className='info-value'>{kelvinHToF}°F</div>
+                <div className='info-value'>{weather ? `${weather.high}° F` : '—'}</div>
               </div>
 
               <div className='cwr-info'>
                 <div className='info-label'>
                   <IoMdArrowDropdown />Low
                 </div>
-                <div className='info-value'>{kelvinLToF}°F</div>
+                <div className='info-value'>{weather ? `${weather.low}° F` : '—'}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <strong>User Location:</strong>{` Lat: ${lat}, Long: ${lng}`}
-
-        <div id='five-day-weather'>
-          <div id='fdw-1'>
+        {/* <div className='five-day-weather'>
+          <div className='fdw-1'>
             1
           </div>
-          <div id='fdw-2'>
+          <div className='fdw-2'>
             2
           </div>
-          <div id='fdw-3'>
+          <div className='fdw-3'>
             3
           </div>
-          <div id='fdw-4'>
+          <div className='fdw-4'>
             4
           </div>
-          <div id='fdw-5'>
+          <div className='fdw-5'>
             5
+          </div>
+        </div> */}
+
+        <div className='location'>
+          <div className='location-city'>
+            <IoMdPin />{`${city}`}
+          </div>
+          <div className='location-time'>
+            {timeRef.current.hours} : {timeRef.current.minutes < 10 ? `0${timeRef.current.minutes}` : timeRef.current.minutes}
           </div>
         </div>
       </div>
 
-      <footer id='weather-footer'>
+      <footer className='weather-footer'>
         {`Copyright © ${currentYear} Aaron Gertler. All rights reserved.`}
       </footer>
     </div>
