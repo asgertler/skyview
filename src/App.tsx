@@ -36,13 +36,21 @@ function App() {
 
   const weatherIcon = () => {
     const weatherIcons: { [key: string]: ReactNode } = {
+      Ash: '',
       Clear: <WiDaySunny style={{ fontSize: '8rem' }} />,
       Clouds: <WiCloudy style={{ fontSize: '8rem' }} />,
+      Dust: '',
+      Haze: '',
       Drizzle: <WiShowers style={{ fontSize: '8rem', top: '12px' }} />,
+      Fog: '',
       Mist: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
       Rain: <WiRain style={{ fontSize: '8rem', top: '8px' }} />,
+      Sand: '',
       Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
+      Smoke: '',
+      Squall: '',
       Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
+      Tornado: '',
     }
     return weatherIcons[weather.main] || <WiNa style={{ fontSize: '9rem' }} />
   }
