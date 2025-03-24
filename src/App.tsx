@@ -9,6 +9,7 @@ import {
   WiDaySunny,
   WiNa,
   WiRain,
+  WiShowers,
   WiSnow,
   WiSprinkle,
   WiThunderstorm,
@@ -37,7 +38,8 @@ function App() {
     const weatherIcons: { [key: string]: ReactNode } = {
       Clear: <WiDaySunny style={{ fontSize: '8rem' }} />,
       Clouds: <WiCloudy style={{ fontSize: '8rem' }} />,
-      Drizzle: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
+      Drizzle: <WiShowers style={{ fontSize: '8rem', top: '12px' }} />,
+      Mist: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
       Rain: <WiRain style={{ fontSize: '8rem', top: '8px' }} />,
       Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
       Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
