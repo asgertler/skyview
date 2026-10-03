@@ -1,30 +1,41 @@
-# React + TypeScript + Vite
+# Skyview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small, UI/UX-focused local weather app. Skyview asks the browser for your
+location and shows current conditions (temperature, feels-like, high/low) for
+where you are, in °F.
 
-Currently, two official plugins are available:
+Built with React 19, TypeScript, Vite 8 and Sass.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting started
 
-## Expanding the ESLint configuration
+Requires Node 22.12+ (Vite 8 and Vitest 5).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```sh
+npm install
+npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+The app is served under `/skyview`, so open <http://localhost:5173/skyview>.
+Your browser will prompt for location access; if it is denied, the app shows a
+message instead of weather.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the Vite dev server |
+| `npm run build` | Typecheck, then build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint (zero warnings allowed) |
+| `npm test` | Run the Vitest suite once (`npm run test:watch` to watch) |
+| `npm run deploy` | Build and publish `dist/` to GitHub Pages |
+
+## How it works
+
+1. `App.tsx` requests the browser's geolocation.
+2. `fetchWeather` (`src/utilities/weatherUtils.ts`) sends the coordinates to a
+   Cloudflare Worker that proxies OpenWeather, so the API key never ships in
+   the client bundle.
+3. The result (or a user-facing error) is stored in React context and rendered.
+
+The version shown in the header is read from `package.json` at build time.
