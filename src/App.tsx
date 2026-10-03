@@ -1,19 +1,10 @@
 /// <reference types='vite-plugin-svgr/client' />
 
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from './context/appContextValue'
 import { fetchWeather } from './utilities/weatherUtils'
 import Spinner from './components/Spinner'
-import { 
-  WiCloudy,
-  WiDaySunny,
-  WiNa,
-  WiRain,
-  WiShowers,
-  WiSnow,
-  WiSprinkle,
-  WiThunderstorm,
-} from 'react-icons/wi'
+import WeatherIcon from './components/WeatherIcon'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from 'react-icons/io'
 import Logo from './assets/skyview-logo.svg?react'
 import './App.sass'
@@ -35,19 +26,6 @@ function App() {
   } = context
 
   const appVersion: string = import.meta.env.VITE_APP_VERSION as string
-
-  const weatherIcon = () => {
-    const weatherIcons: { [key: string]: ReactNode } = {
-      Clear: <WiDaySunny style={{ fontSize: '8rem' }} />,
-      Clouds: <WiCloudy style={{ fontSize: '8rem' }} />,
-      Drizzle: <WiShowers style={{ fontSize: '8rem', top: '12px' }} />,
-      Mist: <WiSprinkle style={{ fontSize: '8rem', top: '12px' }} />,
-      Rain: <WiRain style={{ fontSize: '8rem', top: '8px' }} />,
-      Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
-      Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
-    }
-    return weatherIcons[weather?.main ?? ''] || <WiNa style={{ fontSize: '9rem' }} />
-  }
 
   useEffect(() => {
     let cancelled = false
@@ -120,7 +98,7 @@ function App() {
         <div className='weather-info'>
           <div className='current-weather'>
             <div className='cw-left'>
-              {weatherIcon()}
+              <WeatherIcon condition={weather?.main} />
             </div>
 
             <div className='cw-right'>
