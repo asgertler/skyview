@@ -32,4 +32,3 @@ SVGs are imported as React components with `?react` (vite-plugin-svgr).
 
 - Commit messages use conventional prefixes (`feat:`, `fix:`, `chore:`, `test:`), and work happens on feature branches merged by PR.
 - Dependency upgrades are done one tool per commit, checking that `tsc`, lint, tests and build pass on each commit.
-- `npm audit` still reports findings that need major bumps (Vite 8 for esbuild), so a clean audit is not expected until that upgrade.
