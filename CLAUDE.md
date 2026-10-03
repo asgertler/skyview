@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `npm run dev` — Vite dev server
 - `npm run build` — `tsc` typecheck, then `vite build` (type errors fail the build)
-- `npm run lint` — ESLint with `--max-warnings 0`, so any warning fails
-- `npm test` — Vitest, single run; `npm run test:watch` for watch mode
+- `npm run lint` — ESLint 10 (flat config in `eslint.config.js`) with `--max-warnings 0`, so any warning fails
+- `npm test` — Vitest, single run; `npm run test:watch` for watch mode. Tests run in the node environment by default; component tests opt into jsdom with a `// @vitest-environment jsdom` pragma at the top of the file (see `src/App.test.tsx`, which stubs `navigator.geolocation` and `fetch`)
 - Single test: `npx vitest run src/utilities/weatherUtils.test.ts -t "<test name>"`
 - `npm run deploy` — builds and publishes `dist` to GitHub Pages via `gh-pages` (`base` is `/skyview` in `vite.config.ts`)
 
@@ -31,4 +31,5 @@ SVGs are imported as React components with `?react` (vite-plugin-svgr).
 ## Workflow
 
 - Commit messages use conventional prefixes (`feat:`, `fix:`, `chore:`, `test:`), and work happens on feature branches merged by PR.
-- Dependency upgrades are done one tool per commit, checking that `tsc`, lint, tests and build pass on each commit.
+- Dependency upgrades are done one tool per commit where possible, checking that `tsc`, lint, tests and build pass on each commit. Vite, `@vitejs/plugin-react`, Vitest and `@types/node` have to move together (peer ranges).
+- TypeScript is held at 5.x because typescript-eslint does not yet support 7.
