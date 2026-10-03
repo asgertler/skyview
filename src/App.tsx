@@ -1,6 +1,6 @@
 /// <reference types='vite-plugin-svgr/client' />
 
-import { ReactNode, useContext, useEffect, useRef } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { AppContext } from './context/AppContext'
 import { fetchWeather } from './utilities/weatherUtils'
 import Spinner from './components/Spinner'
@@ -30,6 +30,8 @@ function App() {
     setCity,
     weather,
     setWeather,
+    error,
+    setError,
   } = context
 
   const appVersion: string = import.meta.env.VITE_APP_VERSION as string
@@ -44,42 +46,60 @@ function App() {
       Snow: <WiSnow style={{ fontSize: '8rem', top: '8px' }} />,
       Thunderstorm: <WiThunderstorm style={{ fontSize: '8rem', top: '6px' }} />,
     }
-    return weatherIcons[weather.main] || <WiNa style={{ fontSize: '9rem' }} />
+    return weatherIcons[weather?.main ?? ''] || <WiNa style={{ fontSize: '9rem' }} />
   }
 
   useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords
-          fetchWeather(
-            latitude, 
-            longitude, 
-            setIsLoading, 
-            setCity, 
-            setWeather,
-          )
-        },
-        (err) => {
-          console.error('Error getting user location:', err)
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-        }
-      )
-    } else {
-      console.error('Geolocation is not supported by this browser.')
+    let cancelled = false
+
+    const fail = (message: string) => {
+      if (cancelled) return
+      setError(message)
+      setIsLoading(false)
     }
-  }, [])
 
-  const timeRef = useRef({ hours: new Date().getHours(), minutes: new Date().getMinutes() })
+    if (!('geolocation' in navigator)) {
+      fail('Geolocation is not supported by this browser.')
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords
+        try {
+          const result = await fetchWeather(latitude, longitude)
+          if (cancelled) return
+          setCity(result.city)
+          setWeather(result.weather)
+          setError(null)
+          setIsLoading(false)
+        } catch (err) {
+          console.error('Error fetching weather:', err)
+          fail('Could not load weather data. Please try again later.')
+        }
+      },
+      (err) => {
+        console.error('Error getting user location:', err)
+        fail(
+          err.code === err.PERMISSION_DENIED
+            ? 'Location access was denied. Allow location access to see your local weather.'
+            : 'Could not determine your location.'
+        )
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+      }
+    )
+
+    return () => {
+      cancelled = true
+    }
+  }, [setCity, setError, setIsLoading, setWeather])
+
+  const [now, setNow] = useState(() => new Date())
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date()
-      timeRef.current = { hours: now.getHours(), minutes: now.getMinutes() }
-    }, 1000)
-
+    const intervalId = setInterval(() => setNow(new Date()), 15000)
     return () => clearInterval(intervalId)
   }, [])
 
@@ -95,6 +115,8 @@ function App() {
             </div>
         </header>
 
+        {error && <div className='weather-error' role='alert'>{error}</div>}
+
         <div className='weather-info'>
           <div className='current-weather'>
             <div className='cw-left'>
@@ -102,7 +124,7 @@ function App() {
             </div>
 
             <div className='cw-right'>
-              <h2>{weather.main}</h2>
+              <h2>{weather?.main ?? '—'}</h2>
               <div className='cwr-info-stack'>
                 <div className='cwr-info'>
                   <div className='info-label'>Temp</div>
@@ -153,10 +175,10 @@ function App() {
 
           <div className='location'>
             <div className='location-city'>
-              <IoMdPin />{`${city}`}
+              <IoMdPin />{city}
             </div>
             <div className='location-time'>
-              {timeRef.current.hours} : {timeRef.current.minutes < 10 ? `0${timeRef.current.minutes}` : timeRef.current.minutes}
+              {now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
             </div>
           </div>
         </div>

@@ -13,8 +13,10 @@ export type AppContextType = {
     setIsLoading: Dispatch<SetStateAction<boolean>>,
     city: string,
     setCity: Dispatch<SetStateAction<string>>,
-    weather: WeatherContextType,
-    setWeather: Dispatch<SetStateAction<WeatherContextType>>,
+    weather: WeatherContextType | null,
+    setWeather: Dispatch<SetStateAction<WeatherContextType | null>>,
+    error: string | null,
+    setError: Dispatch<SetStateAction<string | null>>,
 }
 
 export type AppContextProviderProps = {
