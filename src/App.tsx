@@ -1,7 +1,7 @@
 /// <reference types='vite-plugin-svgr/client' />
 
 import { ReactNode, useContext, useEffect, useState } from 'react'
-import { AppContext } from './context/AppContext'
+import { AppContext } from './context/appContextValue'
 import { fetchWeather } from './utilities/weatherUtils'
 import Spinner from './components/Spinner'
 import { 

@@ -1,7 +1,6 @@
-import { createContext, useState } from 'react'
-import { AppContextProviderProps, AppContextType, WeatherContextType } from '../types/types'
-
-export const AppContext = createContext<AppContextType | undefined>(undefined)
+import { useState } from 'react'
+import { AppContext } from './appContextValue'
+import { AppContextProviderProps, WeatherContextType } from '../types/types'
 
 export default function AppContextProvider({ children }: AppContextProviderProps) {
     const [loading, setIsLoading] = useState<boolean>(true)
