@@ -1,6 +1,6 @@
-# Skyview
+# Skyview WX
 
-A small, UI/UX-focused local weather app. Skyview asks the browser for your
+A small, UI/UX-focused local weather app. Skyview WX asks the browser for your
 location and shows current conditions (temperature, feels-like, high/low) for
 where you are, in °F.
 
@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-The app is served under `/skyview`, so open <http://localhost:5173/skyview>.
+The app is served under `/skyview-wx`, so open <http://localhost:5173/skyview-wx>.
 Your browser will prompt for location access; if it is denied, the app shows a
 message instead of weather.
 

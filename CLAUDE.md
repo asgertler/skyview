@@ -9,11 +9,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` — ESLint 10 (flat config in `eslint.config.js`) with `--max-warnings 0`, so any warning fails
 - `npm test` — Vitest, single run; `npm run test:watch` for watch mode. Tests run in the node environment by default; component tests opt into jsdom with a `// @vitest-environment jsdom` pragma at the top of the file (see `src/App.test.tsx`, which stubs `navigator.geolocation` and `fetch`)
 - Single test: `npx vitest run src/utilities/weatherUtils.test.ts -t "<test name>"`
-- `npm run deploy` — builds and publishes `dist` to GitHub Pages via `gh-pages` (`base` is `/skyview` in `vite.config.ts`)
+- `npm run deploy` — builds and publishes `dist` to GitHub Pages via `gh-pages` (`base` is `/skyview-wx` in `vite.config.ts`)
 
 ## Architecture
 
-Skyview is a small client-only React 18 + TypeScript + Vite SPA that shows current weather for the user's location. Styling is Sass (`.sass` indented syntax), with `prefers-color-scheme` light/dark variants in `App.sass`.
+Skyview WX is a small client-only React 19 + TypeScript + Vite SPA that shows current weather for the user's location. Styling is Sass (`.sass` indented syntax), with `prefers-color-scheme` light/dark variants in `App.sass`.
 
 Data flow, which spans several files:
 1. `App.tsx` requests browser geolocation in a `useEffect`.
