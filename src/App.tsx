@@ -6,7 +6,7 @@ import { fetchWeather } from './utilities/weatherUtils'
 import Spinner from './components/Spinner'
 import WeatherIcon from './components/WeatherIcon'
 import { IoMdArrowDropup, IoMdArrowDropdown, IoMdPin } from 'react-icons/io'
-import Logo from './assets/skyview-logo.svg?react'
+import Logo from './assets/skyview-wx-logo.svg?react'
 import './App.sass'
 
 function App() {
